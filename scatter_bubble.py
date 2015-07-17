@@ -1,10 +1,8 @@
-
-"""
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 import numpy as np
 import pandas as pd
-"""
+
 """
 n = 50
 x, y, z, s, ew = np.random.rand(5, n)
@@ -39,9 +37,6 @@ for X, Y, Z in zip(x, y, z):
 plt.show()
 """
 
-
-"""
-#z = ['One','Two','Three'] # list, was set with {}
 n=10
 c = np.random.rand( n, 4)
 df = pd.read_csv('full_results.csv', header=0, index_col=0)
@@ -52,6 +47,8 @@ x_data = 'Income_EJ'
 y_data = 'Race_EJ'
 s_data = 'Deaths'
 rank_data = 'Deaths'
+label_rank = 11 # will output top n-1
+label_length = 40 #characters
 
 x = df[[ x_data ]].values
 y = df[[ y_data ]].values
@@ -59,32 +56,30 @@ s = df[[ s_data ]].values
 
 # maximum bubble size
 bubblemax = 1000
+bubblemin = 10
 smax, smin = np.amax( s ), np.amin( s )
-s = s / smax * bubblemax + 10
+s = s / smax * bubblemax + bubblemin
 srad = np.sqrt( s / np.pi )
 
 # calculate base value for top ten 
 df_ranked = df.rank( axis=0, ascending=False )
 
-label_rank = 11
 idx = df_ranked[ df_ranked[ rank_data ] < label_rank ].index.tolist()
 
 offset = 3
 
 fig, ax = plt.subplots()
 
-
-
 ax.scatter( x, y, s=s, c=c)
-ax.set_alpha( 0.6)
+ax.set_alpha( 0.6 )
 
 for X, Y, Z in zip( 
     df[ x_data ][ idx ].values,
     df[ y_data ][ idx ].values,
-    df[ x_data ][idx].index
+    df[ x_data ][ idx ].index
     ):  # took out R = srad, which goes in xytext
-    ax.annotate('{}'.format( Z ), xy=( X, Y ), 
-        xytext=(20+offset,20), ha='right', textcoords='offset points',
+    ax.annotate('{:.{}}'.format( Z, label_length ), xy=( X, Y ), 
+        xytext=(20+offset,20), ha='center', textcoords='offset points',
         arrowprops=dict( arrowstyle='-', shrinkA=0), fontsize=9
         )
 
@@ -101,4 +96,3 @@ plt.ylabel( y_data, fontsize=9 )
 plt.xlabel( x_data, fontsize=9 )
 
 plt.show()
-"""
