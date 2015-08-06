@@ -43,12 +43,13 @@ df = pd.read_csv('full_results.csv', header=0, index_col=0)
 #df.plot( kind='scatter', x='C', y='E', s=df['B'])
 #plt.show()
 
-x_data = 'Income_EJ'
+x_data = 'Deaths'
 y_data = 'Race_EJ'
-s_data = 'Deaths'
-rank_data = 'Deaths'
-label_rank = 11 # will output top n-1
-label_length = 40 #characters
+s_data = 'Production'
+rank_data = 'Production'
+label_rank = 10 # top n sectors will be labeled
+label_length = 50 #characters
+buffer = 0.05
 
 x = df[[ x_data ]].values
 y = df[[ y_data ]].values
@@ -64,14 +65,17 @@ srad = np.sqrt( s / np.pi )
 # calculate base value for top ten 
 df_ranked = df.rank( axis=0, ascending=False )
 
-idx = df_ranked[ df_ranked[ rank_data ] < label_rank ].index.tolist()
+idx = df_ranked[ df_ranked[ rank_data ] < label_rank+1 ].index.tolist()
 
 offset = 3
 
 fig, ax = plt.subplots()
 
-ax.scatter( x, y, s=s, c=c)
+im = ax.scatter( x, y, s=s, c=s, edgecolor='w')
 ax.set_alpha( 0.6 )
+#xmin, xmax, ymin, ymax = (1+buffer) * x.min()
+#ax.set_xlim( (1+buffer)*[x.min(), x.max()] ) 
+#ax.set_ylim( (1+buffer)*[y.min(), y.max()] )
 
 for X, Y, Z in zip( 
     df[ x_data ][ idx ].values,
@@ -94,5 +98,7 @@ ax.grid()
 
 plt.ylabel( y_data, fontsize=9 )
 plt.xlabel( x_data, fontsize=9 )
+
+fig.colorbar( im, ax=ax )
 
 plt.show()

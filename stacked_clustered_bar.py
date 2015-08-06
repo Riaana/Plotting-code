@@ -9,11 +9,11 @@ labels is a list of the names of the dataframe, used for the legend
 title is a string for the title of the plot
 H is the hatch used for identification of the different dataframe"""
 
-    n_df = len(dfall)
-    n_col = len(dfall[0].columns) 
-    n_ind = len(dfall[0].index)
+    n_df = len(dfall) # number of data frames
+    n_col = len(dfall[0].columns) # number of columns, and number of stacked items
+    n_ind = len(dfall[0].index) # number of indexes, 
     axe = plt.subplot(111)
-
+    
     for df in dfall : # for each data frame
         axe = df.plot(kind="bar",linewidth=0, stacked=True, ax = axe, legend=False, grid=False, **kwargs)  # make bar plots
 
@@ -46,5 +46,5 @@ df2 = pd.DataFrame(np.random.rand(4,5),index=["A","B","C","D"],columns=["I","J",
 df3 = pd.DataFrame(np.random.rand(4,5),index=["A","B","C","D"],columns=["I","J","K","L","M"])
 
 # Then, just call :
-plot_clustered_stacked([df1,df2,df3],["df1","df2","df3"])
+plot_clustered_stacked([df1,df2],["df1","df2","df3"])
 plt.show()
